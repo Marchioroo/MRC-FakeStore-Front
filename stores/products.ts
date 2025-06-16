@@ -10,17 +10,35 @@ export const useProductsStore = defineStore("products", {
     products: [] as Product[],
     totalRecords: 0,
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 4,
     initialized: false,
   }),
 
   actions: {
-    async fetchProducts(page: number = 1, size: number = 5) {
+    async fetchProducts(
+      page: number = 1,
+      size: number = 4,
+      name?: string,
+      barcode?: string
+    ) {
       try {
+        const params = new URLSearchParams();
+        params.append("pageNumber", page.toString());
+        params.append("pageSize", size.toString());
+
+        if (name) {
+          params.append("name", name);
+        }
+
+        if (barcode) {
+          params.append("barcode", barcode);
+        }
+
         const response = await fetch(
-          `http://localhost:5086/api/Products?pageNumber=${page}&pageSize=${size}`
+          `http://localhost:5086/api/Products?${params.toString()}`
         );
         const data = await response.json();
+
         this.products = data.data;
         this.totalRecords = data.totalRecords;
         this.pageNumber = data.pageNumber;

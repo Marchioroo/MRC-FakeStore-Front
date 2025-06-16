@@ -13,7 +13,7 @@ const closeModal = () => {
             @click.self="closeModal()">
 
             <div
-                class="bg-white rounded-2xl md:rounded-2xl px-4 py-3 md:p-6 w-full md:min-w-[450px] h-auto md:h-auto md:max-w-md shadow-lg transform transition-all overflow-y-auto relative">
+                class="bg-white rounded-2xl md:rounded-2xl w-full md:min-w-[450px] h-auto md:h-auto md:max-w-md shadow-lg transform transition-all overflow-y-auto relative">
                 <slot />
             </div>
         </div>

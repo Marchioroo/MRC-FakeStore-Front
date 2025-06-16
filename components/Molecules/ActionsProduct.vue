@@ -95,7 +95,7 @@ function handleSave() {
 
       <div class="space-y-1">
         <label class="block text-sm font-medium text-gray-700">Código de Barras:</label>
-        <input v-model="props.formProduct.barcode"
+        <input v-model="props.formProduct.barcode" type="number"
           class="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-0 hover:border-gray-400" />
       </div>
 
@@ -107,16 +107,23 @@ function handleSave() {
 
       <div class="space-y-1">
         <label class="block text-sm font-medium text-gray-700">Imagem:</label>
-        <input type="file" accept="image/*" @change="handleFileChange"
-          class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:border file:rounded file:text-sm file:bg-gray-100 hover:file:bg-gray-200 focus:outline-none" />
+
+        <label for="imageUpload"
+          class="inline-block cursor-pointer bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium py-2 px-4 rounded shadow transition">
+          Escolher Imagem
+        </label>
+        <input id="imageUpload" type="file" accept="image/*" @change="handleFileChange" class="hidden" />
         <p v-if="fieldErrors.image" class="text-red-500 text-xs">{{ fieldErrors.image }}</p>
       </div>
 
+
       <div class="flex justify-end space-x-2 pt-4">
-        <button @click="handleClose" class="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-100">
+        <button @click="handleClose"
+          class="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-100 cursor-pointer">
           Cancelar
         </button>
-        <button @click="handleSave" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 shadow">
+        <button @click="handleSave"
+          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 shadow cursor-pointer">
           Salvar
         </button>
       </div>

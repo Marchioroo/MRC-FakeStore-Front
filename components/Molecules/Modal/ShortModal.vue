@@ -9,11 +9,12 @@ const closeModal = () => {
 </script>
 <template>
     <transition name="slide-fade">
-        <div v-if="model" class="fixed inset-0 bg-gray-200  flex items-center justify-center z-50 p-2"
+        <div v-if="model" class="fixed inset-0 bg-gray-100  flex items-center justify-center z-50 p-2"
             @click.self="closeModal()">
 
             <div
-                class="bg-white rounded-2xl md:rounded-2xl px-4 py-3 md:p-6 w-full md:min-w-[350px] h-auto md:h-auto md:max-w-md shadow-lg transform transition-all overflow-y-auto relative">
+                class="bg-white rounded-2xl p-6 w-[100px] md:w-auto shadow-lg transform transition-all overflow-y-auto relative">
+
                 <slot />
             </div>
         </div>

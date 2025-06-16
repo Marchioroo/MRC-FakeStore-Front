@@ -27,7 +27,7 @@ const props = defineProps({
             : 'bg-[#515763] hover:bg-[#5d697c]'
     ]">
         <div v-if="props.filter">
-            <AtomsIconsFilter class="w-5 h-5 hidden md:inline-block mr-2 mb-0.5" />
+            <AtomsIconsFilter class="w-4 h-4 hidden md:inline-block mr-1 " />
         </div>
 
         <template v-if="props.isLoading">
