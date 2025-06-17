@@ -1,76 +1,41 @@
-# Nuxt Minimal Starter
+📦 Frontend - FakeStore CRUD
+Descrição
+Este projeto é uma interface web para gerenciamento de produtos de uma loja virtual, desenvolvido utilizando Vue 3 + Nuxt 3 com Pinia para gerenciamento de estado global.
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Principais Tecnologias
+✅ Vue 3 com Composition API
 
-## Setup
+✅ Nuxt 3
 
-Make sure to install dependencies:
+✅ Pinia (Gerenciamento de estado)
 
-```bash
-# npm
-npm install
+✅ Tailwind CSS (Estilização)
 
-# pnpm
-pnpm install
+✅ TypeScript
 
-# yarn
-yarn install
+✅ Fetch API (Consumo de API externa)
 
-# bun
-bun install
-```
+✅ Upload de arquivos via FormData (multipart/form-data)
 
-## Development Server
+✅ Sistema de Filtro Dinâmico com Dropdown por Tipo de Pesquisa (Nome / Código de Barras)
 
-Start the development server on `http://localhost:3000`:
+✅ Paginação
 
-```bash
-# npm
-npm run dev
+✅ Ordenação Dinâmica por Colunas (ID e Preço)
 
-# pnpm
-pnpm dev
+✅ Validações Frontend (mínimo de caracteres, campos obrigatórios e limites de tamanho)
 
-# yarn
-yarn dev
+Funcionalidades
+📋 CRUD completo de produtos.
 
-# bun
-bun run dev
-```
+🖼 Upload de imagens de produto via input file com pré-visualização e validação.
 
-## Production
+🔍 Filtros de busca por Nome e Código de Barras (realizando consultas no backend com parâmetros dinâmicos).
 
-Build the application for production:
+📄 Paginação de resultados.
 
-```bash
-# npm
-npm run build
+🔃 Ordenação por colunas com controle de sortField e sortOrder enviados via query string.
 
-# pnpm
-pnpm build
+✅ Componentização em níveis (Atoms, Molecules).
 
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-# MRC-FakeStore-Front
+🧹 Controle de estado centralizado via Pinia, garantindo sincronização de dados entre componentes.
