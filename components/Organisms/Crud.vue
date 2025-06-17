@@ -5,26 +5,47 @@ import type { Product, ProductInput } from '~/types/products';
 import ConfirmModal from '../Molecules/ConfirmModal.vue';
 
 const store = useProductsStore();
+const searchName = ref('');
+const searchBarcode = ref('');
+const searchType = ref<'name' | 'barcode'>('name');
 const searchTerm = ref('');
-const filtroNome = ref<string>('');
-const filtroCodigoBarras = ref<string>('');
+const showFilterDropdown = ref(false);
+const sortField = ref<'id' | 'price'>('id');
 const showForm = ref(false);
 const modalValidate = ref(false);
 const showModalConfirm = ref(false);
 const isLoading = ref<boolean>(true)
 const formMode = ref<'create' | 'edit'>('create');
+const sortAsc = ref(true);
+const selectedProductId = ref<number | null>(null);
+const currentPage = ref(1);
+const pageSize = computed(() => store.pageSize);
+const totalPages = computed(() => Math.ceil(store.totalRecords / pageSize.value));
+
+
+async function applySearch() {
+    const name = searchType.value === 'name' ? searchTerm.value : '';
+    const barcode = searchType.value === 'barcode' ? searchTerm.value : '';
+    await store.fetchProducts(currentPage.value, pageSize.value, name, barcode);
+}
+const filterOptions = computed(() => [
+    { key: 'name', label: 'Buscar por Nome' },
+    { key: 'barcode', label: 'Buscar por Código de Barras' },
+]);
+
+function selectFilter(type: 'name' | 'barcode') {
+    searchType.value = type;
+    showFilterDropdown.value = false;
+    // Aqui você pode também limpar o searchTerm se quiser
+}
+
 const formProduct = ref<ProductInput>({
     title: '',
     price: 0,
     description: '',
     image: new File([], ''),  // Valor inicial vazio
 });
-const selectedProductId = ref<number | null>(null);
 
-const currentPage = ref(1);
-const pageSize = computed(() => store.pageSize);
-const totalPages = computed(() => Math.ceil(store.totalRecords / pageSize.value));
-const produtos = computed(() => store.products);
 
 onMounted(async () => {
     isLoading.value = true
@@ -33,9 +54,9 @@ onMounted(async () => {
 });
 
 const produtosFiltrados = computed(() => {
-    if (!searchTerm.value.trim()) return store.products;
+    if (!searchName.value.trim()) return store.products;
 
-    const termo = searchTerm.value.toLowerCase();
+    const termo = searchName.value.toLowerCase();
 
     return store.products.filter(product =>
         product.title.toLowerCase().includes(termo) ||
@@ -80,16 +101,14 @@ async function handleSave(payload: { product: ProductInput; imageFile: File },) 
     } else if (formMode.value === 'edit' && selectedProductId.value !== null) {
         await store.updateProduct(selectedProductId.value, payload.product, payload.imageFile);
     }
+    showForm.value = false;
     setTimeout(() => {
         modalValidate.value = false;
-        showForm.value = false;
     }, 2000);
 
     await loadPage(currentPage.value);
 }
 
-
-// Excluir produto
 
 function openDeleteConfirm(productId: number) {
     selectedProductId.value = productId;
@@ -109,7 +128,31 @@ async function handleDelete(productId: number) {
     await loadPage(currentPage.value);
 }
 
+const produtosOrdenados = computed(() => {
+    const produtos = [...produtosFiltrados.value];
 
+    return produtos.sort((a, b) => {
+        const aVal = sortField.value === 'price' ? a.price : a.id;
+        const bVal = sortField.value === 'price' ? b.price : b.id;
+
+        return sortAsc.value ? aVal - bVal : bVal - aVal;
+    });
+});
+
+function toggleSort(field: 'id' | 'price') {
+    if (sortField.value === field) {
+        sortAsc.value = !sortAsc.value;
+    } else {
+        sortField.value = field;
+        sortAsc.value = true;
+    }
+}
+
+watch(searchTerm, (newVal) => {
+    if (newVal === "") {
+        applySearch();
+    }
+});
 </script>
 
 
@@ -123,22 +166,42 @@ async function handleDelete(productId: number) {
             <div class="flex flex-col justify-centr items-center">
                 <NuxtImg src="/img/animationCheck.gif" />
                 <span v-if="formMode === 'create'">Produto criado com sucesso!</span>
-                <span v-else>Produto criado com sucesso!</span>
+                <span v-else>Produto editado com sucesso!</span>
             </div>
         </div>
     </MoleculesModalShortModal>
 
 
-
-
     <div class="p-4 md:p-8 space-y-6">
 
-        <div class="flex flex-row justify-between">
-            <AtomsButton title="Novo Produto" @click="openCreateForm"
-                class="!bg-[#e3604d] hover:!bg-[#c94f3c] h-[20px]  !rounded-sm !text-xs cursor-pointer w-[100px] mt-1" />
-            <AtomsSearch v-model="searchTerm" placeholder="Busque por produtos..." class="!w-[500px]" />
-            <AtomsButton title="Filtrar" :filter="true"
-                class="!bg-[#45936c] hover:!bg-[#367456] h-[20px]  !rounded-sm !text-xs cursor-pointer w-[100px] mt-1" />
+        <div class="flex flex-col md:flex-row justify-between px-4 md:px-8 space-y-2 md:space-y-0 md:space-x-4">
+
+            <AtomsSearch v-model="searchTerm" :searchType="searchType" @input="applySearch"
+                class="!w-full md:!w-[500px] focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-75"
+                :placeholder="searchType === 'name' ? 'Buscando por nome' : 'Buscando por código de barras'" />
+
+            <!-- Botões - ficam abaixo no mobile, ao lado no desktop -->
+            <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+
+                <AtomsButton title="Novo Produto" @click="openCreateForm"
+                    class="!bg-[#e3604d] hover:!bg-[#c94f3c] h-[30px] !rounded-sm !text-xs cursor-pointer w-full md:w-[100px]" />
+
+                <div class="relative">
+                    <AtomsButton title="Filtrar" :filter="true" @click="showFilterDropdown = !showFilterDropdown"
+                        class="!bg-[#45936c] hover:!bg-[#367456] h-[30px] !rounded-sm !text-xs cursor-pointer w-full md:w-[100px]" />
+
+                    <div v-if="showFilterDropdown"
+                        class="absolute right-0 mt-1 bg-white rounded shadow-md text-sm z-10 w-[180px]">
+                        <div v-for="option in filterOptions" :key="option.key"
+                            @click="selectFilter(option.key as 'name' | 'barcode')"
+                            class="cursor-pointer hover:bg-gray-100 px-3 py-2">
+                            {{ option.label }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
         <div v-if="isLoading" class="p-10">
@@ -149,17 +212,21 @@ async function handleDelete(productId: number) {
         <div v-else-if="produtosFiltrados.length > 0" class="p-4 md:p-8 space-y-6">
             <div
                 class="hidden md:grid grid-cols-[50px_80px_1fr_120px_200px_150px_150px] bg-[#e5ead4] text-gray-700 font-semibold py-2 px-3 rounded">
-                <div>ID</div>
+                <div @click="toggleSort('id')" class="cursor-pointer select-none">
+                    ID {{ sortField === 'id' ? (sortAsc ? '↑' : '↓') : '' }}
+                </div>
                 <div>Produto</div>
-                <div class=" md:ml-5">Título</div>
-                <div class=" md:ml-2">Preço</div>
+                <div class="md:ml-5">Título</div>
+                <div @click="toggleSort('price')" class="cursor-pointer select-none">
+                    Preço {{ sortField === 'price' ? (sortAsc ? '↑' : '↓') : '' }}
+                </div>
                 <div>Descrição</div>
                 <div>Código de Barras</div>
                 <div class="text-center">Ações</div>
             </div>
 
             <!-- Lista de Produtos -->
-            <div v-for="product in produtosFiltrados" :key="product.id"
+            <div v-for="product in produtosOrdenados" :key="product.id"
                 class="rounded-md p-4 bg-white shadow-sm hover:shadow-md transition md:grid md:grid-cols-[50px_80px_1fr_120px_200px_150px_150px] md:items-center">
 
                 <div class="text-sm md:text-center font-semibold text-gray-700">

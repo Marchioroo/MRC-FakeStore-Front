@@ -80,7 +80,10 @@ export const useProductsStore = defineStore("products", {
         formData.append("title", newProduct.title);
         formData.append("price", newProduct.price.toString());
         formData.append("description", newProduct.description);
-        formData.append("barcode", newProduct.barcode || "");
+        formData.append(
+          "barcode",
+          newProduct.barcode ? newProduct.barcode.toString() : ""
+        );
         formData.append("category", newProduct.category || "");
         formData.append("image", imageFile);
 
@@ -103,7 +106,10 @@ export const useProductsStore = defineStore("products", {
         formData.append("title", updatedProduct.title);
         formData.append("price", updatedProduct.price.toString());
         formData.append("description", updatedProduct.description);
-        formData.append("barcode", updatedProduct.barcode || "");
+        formData.append(
+          "barcode",
+          updatedProduct.barcode ? updatedProduct.barcode.toString() : ""
+        );
         formData.append("category", updatedProduct.category || "");
         formData.append("image", imageFile);
 

@@ -2,7 +2,7 @@ export interface Product {
   id: number;
   externalId: number;
   title: string;
-  barcode: string;
+  barcode: number;
   price: number;
   description: string;
   category: string;
@@ -19,7 +19,7 @@ export interface PaginatedProducts {
 export interface ProductInput {
   title: string;
   price: number;
-  barcode?: string;
+  barcode?: number | null;
   category?: string;
   description: string;
   image?: File | null;

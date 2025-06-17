@@ -16,14 +16,17 @@ watch(() => props.modelValue, (newVal) => {
     searchTerm.value = newVal;
 });
 
+watch(searchTerm, (newVal) => {
+    emit("update:modelValue", newVal);
+});
+
 function updateValue(event: Event) {
     const target = event.target as HTMLInputElement;
-    emit("update:modelValue", target.value);
+    searchTerm.value = target.value;
 }
 
 function limparCampo() {
     searchTerm.value = "";
-    emit("update:modelValue", "");
 }
 </script>
 
@@ -31,7 +34,7 @@ function limparCampo() {
     <div>
         <div class="relative flex items-center w-full px-2">
             <input type="text" :value="searchTerm" :placeholder="props.placeholder || 'Buscar...'" @input="updateValue"
-                class="rounded-md block w-full border border-gray-200 px-4 py-2.5 pr-10 shadow-md bg-white" />
+                class="rounded-md block w-full border border-gray-200 px-4 py-2.5 pr-10 shadow-md bg-white focus:outline-none focus:ring-0" />
 
             <AtomsIconsSearch v-if="searchTerm === ''"
                 class="absolute right-5 h-5 w-5 text-gray-400 pointer-events-none" />
