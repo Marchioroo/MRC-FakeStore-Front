@@ -1,6 +1,8 @@
 📦 Frontend - FakeStore CRUD
 Descrição
 Este projeto é uma interface web para gerenciamento de produtos de uma loja virtual, desenvolvido utilizando Vue 3 + Nuxt 3 com Pinia para gerenciamento de estado global.
+![image](https://github.com/user-attachments/assets/9b65811c-10a4-4c71-a344-799c8317570b)
+
 
 Principais Tecnologias
 ✅ Vue 3 com Composition API
