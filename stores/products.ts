@@ -35,7 +35,7 @@ export const useProductsStore = defineStore("products", {
         }
 
         const response = await fetch(
-          `http://localhost:5086/api/Products?${params.toString()}`
+          `https://mrc-fakestore.azurewebsites.net/api/Products?${params.toString()}`
         );
         const data = await response.json();
 
@@ -57,7 +57,7 @@ export const useProductsStore = defineStore("products", {
     async deleteProduct(id: number) {
       try {
         const { error } = await useFetch(
-          `http://localhost:5086/api/Products/${id}`,
+          `https://mrc-fakestore.azurewebsites.net/api/Products/${id}`,
           {
             method: "DELETE",
           }
@@ -87,10 +87,13 @@ export const useProductsStore = defineStore("products", {
         formData.append("category", newProduct.category || "");
         formData.append("image", imageFile);
 
-        await $fetch("http://localhost:5086/api/Products/register-with-image", {
-          method: "POST",
-          body: formData,
-        });
+        await $fetch(
+          "https://mrc-fakestore.azurewebsites.net/api/Products/register-with-image",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
       } catch (error) {
         console.error("Erro ao criar produto:", error);
       }
@@ -113,10 +116,13 @@ export const useProductsStore = defineStore("products", {
         formData.append("category", updatedProduct.category || "");
         formData.append("image", imageFile);
 
-        await $fetch(`http://localhost:5086/api/Products/${id}`, {
-          method: "PUT",
-          body: formData,
-        });
+        await $fetch(
+          `https://mrc-fakestore.azurewebsites.net/api/Products/${id}`,
+          {
+            method: "PUT",
+            body: formData,
+          }
+        );
       } catch (error) {
         console.error("Erro ao atualizar produto:", error);
       }
