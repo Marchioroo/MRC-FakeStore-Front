@@ -179,16 +179,16 @@ watch(searchTerm, (newVal) => {
             <AtomsSearch v-model="searchTerm" :searchType="searchType" @input="applySearch"
                 class="!w-full md:!w-[500px] focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-75"
                 :placeholder="searchType === 'name' ? 'Buscando por nome' : 'Buscando por código de barras'" />
+            <div class="flex w-full space-x-2 px-2">
 
-            <!-- Botões - ficam abaixo no mobile, ao lado no desktop -->
-            <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+                <div class="flex-1">
+                    <AtomsButton title="Novo Produto" @click="openCreateForm"
+                        class="!bg-[#e3604d] hover:!bg-[#c94f3c] h-[30px] !rounded-sm !text-xs cursor-pointer w-full" />
+                </div>
 
-                <AtomsButton title="Novo Produto" @click="openCreateForm"
-                    class="!bg-[#e3604d] hover:!bg-[#c94f3c] h-[30px] !rounded-sm !text-xs cursor-pointer w-full md:w-[100px]" />
-
-                <div class="relative">
+                <div class="flex-1 relative">
                     <AtomsButton title="Filtrar" :filter="true" @click="showFilterDropdown = !showFilterDropdown"
-                        class="!bg-[#45936c] hover:!bg-[#367456] h-[30px] !rounded-sm !text-xs cursor-pointer w-full md:w-[100px]" />
+                        class="!bg-[#45936c] hover:!bg-[#367456] h-[30px] !rounded-sm !text-xs cursor-pointer w-full" />
 
                     <div v-if="showFilterDropdown"
                         class="absolute right-0 mt-1 bg-white rounded shadow-md text-sm z-10 w-[180px]">
@@ -201,6 +201,7 @@ watch(searchTerm, (newVal) => {
                 </div>
 
             </div>
+
 
         </div>
 
