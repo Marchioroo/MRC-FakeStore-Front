@@ -179,14 +179,15 @@ watch(searchTerm, (newVal) => {
             <AtomsSearch v-model="searchTerm" :searchType="searchType" @input="applySearch"
                 class="!w-full md:!w-[500px] focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-75"
                 :placeholder="searchType === 'name' ? 'Buscando por nome' : 'Buscando por código de barras'" />
-            <div class="flex w-full space-x-2 px-2">
 
-                <div class="flex-1">
+            <div class="flex flex-row space-x-2 px-2">
+
+                <div class="w-1/2 md:w-[100px]">
                     <AtomsButton title="Novo Produto" @click="openCreateForm"
                         class="!bg-[#e3604d] hover:!bg-[#c94f3c] h-[30px] !rounded-sm !text-xs cursor-pointer w-full" />
                 </div>
 
-                <div class="flex-1 relative">
+                <div class="relative w-1/2 md:w-[100px]">
                     <AtomsButton title="Filtrar" :filter="true" @click="showFilterDropdown = !showFilterDropdown"
                         class="!bg-[#45936c] hover:!bg-[#367456] h-[30px] !rounded-sm !text-xs cursor-pointer w-full" />
 
@@ -201,8 +202,6 @@ watch(searchTerm, (newVal) => {
                 </div>
 
             </div>
-
-
         </div>
 
         <div v-if="isLoading" class="p-10">
